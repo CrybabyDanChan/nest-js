@@ -8,6 +8,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
       PGDATA: /data/postgres
+      POSTGRES_DB: ${POSTGRES_DB:-mydb}
     volumes:
        - postgres:/data/postgres
     ports:
