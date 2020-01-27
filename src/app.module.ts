@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersController } from './user/user.controller';
-import { UsersService } from './user/user.service';
+import { UsersController } from './users/user.controller';
+import { UsersService } from './users/user.service';
+import { NoteController } from './note/note.controller';
+import { NoteService } from './note/note.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -17,7 +19,7 @@ import { UsersService } from './user/user.service';
       synchronize: true,
     })
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  controllers: [AppController, UsersController, NoteController],
+  providers: [AppService, UsersService, NoteService],
 })
 export class AppModule {}
