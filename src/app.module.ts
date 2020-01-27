@@ -6,6 +6,8 @@ import { UsersController } from './users/user.controller';
 import { UsersService } from './users/user.service';
 import { NoteController } from './note/note.controller';
 import { NoteService } from './note/note.service';
+import { TagsController } from './tags/tags.controller';
+import { TagsService } from './tags/tags.service';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -19,7 +21,7 @@ import { NoteService } from './note/note.service';
       synchronize: true,
     })
   ],
-  controllers: [AppController, UsersController, NoteController],
-  providers: [AppService, UsersService, NoteService],
+  controllers: [AppController, UsersController, NoteController, TagsController],
+  providers: [AppService, UsersService, NoteService, TagsService],
 })
 export class AppModule {}

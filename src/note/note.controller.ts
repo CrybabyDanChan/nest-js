@@ -9,7 +9,7 @@ export class NoteController {
 
     @Get()
     async getUsers() {
-        return  await this.noteService.getFullTable() + '<a href="/">back</a>';
+        return  await this.noteService.getFullTable();
     }
 
     @Get(':id')
@@ -17,5 +17,11 @@ export class NoteController {
         let id = params.id;
         return this.noteService.getRow(id);
     }
+
+    @Post()
+    addPost(@Body() data) {
+        return this.noteService.addRow(data);
+    } 
+
 
 }
