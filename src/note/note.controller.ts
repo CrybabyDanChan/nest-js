@@ -19,9 +19,15 @@ export class NoteController {
     }
 
     @Post()
-    addPost(@Body() data) {
+    addNote(@Body() data) {
         return this.noteService.addRow(data);
     } 
 
+    @Put(':id/addtag')
+    addTagToNote(@Param() params, @Query() data) {
+        let id = params.id;
+        let tagsArray = data.tags.split(',');
+        this.noteService.addTagToNote(id, tagsArray);       
+    }
 
 }

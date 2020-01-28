@@ -7,10 +7,8 @@ export class UsersController {
 
     @Options()
     @Header('Access-Control-Allow-Origin', '*')
-    @Header('Access-Control-Allow-Headers', '*')
-    @Header('Access-Control-Allow-Method', '*')
     response() {
-        console.log('1')
+        console.log('one')
     }
 
     @Get(':id')
@@ -22,6 +20,12 @@ export class UsersController {
     @Get()
     getUsers() {
         return this.userService.getFullTable();
+    }
+
+    @Get(':id/notes')
+    getUserPosts(@Param() params) {
+        let id = params.id;
+        return this.userService.getNotes(id);
     }
 
 }
