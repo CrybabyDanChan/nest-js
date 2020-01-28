@@ -12,9 +12,13 @@ export class NoteService extends Service{
     }
 
     async getFullTable() {
+        let tagRep = this.entities.getRepository(Tag);
         let notesArr = await this.entities.find(this.entity);
         notesArr.map((el) => {
-            el.tags = this.entities.find(Tag, { note: el.id })
+            el.tags = this.entities.find(Tag, { 
+                relations: ['note'],
+                where: { id: el.id } 
+            })
         })
         return notesArr
     }
