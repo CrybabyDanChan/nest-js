@@ -4,8 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersController } from './users/user.controller';
 import { UsersService } from './users/user.service';
-import { NoteController } from './note/note.controller';
-import { NoteService } from './note/note.service';
+import { NoteController } from './notes/notes.controller';
+import { NoteService } from './notes/notes.service';
 import { TagsController } from './tags/tags.controller';
 import { TagsService } from './tags/tags.service';
 @Module({

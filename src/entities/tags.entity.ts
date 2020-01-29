@@ -9,7 +9,4 @@ export class Tag {
   @Column({ length: 20 })
   name: string;
 
-  @ManyToMany(type => Note)
-  @JoinTable()
-  notes: Note[];
 }

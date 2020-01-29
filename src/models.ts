@@ -12,7 +12,6 @@ export class Service {
     addRow(rowData) {
         this.entities.save(this.entity, rowData)
         .catch( err => console.log(err))
-
     }
 
     async updateRow(rowData, id) {

@@ -13,7 +13,7 @@ export class UsersService extends Service {
     async getNotes(id) {
         let userRep = await this.entities.getRepository(User);
         let user = await userRep.findOne(id, { relations: ["notes"]});
-        return user.note;
+        return user.notes;
     }
 
 }

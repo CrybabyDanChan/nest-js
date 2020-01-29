@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { User } from "./user.entity";
+import { Tag } from './tags.entity';
 
 @Entity()
 export class Note {
@@ -21,5 +22,9 @@ export class Note {
   @ManyToMany(type => User)
   @JoinTable()
   like: User[];
+
+  @ManyToMany(type => Tag, tag => tag.id)
+  @JoinTable()
+  tag: Tag[];
 
 }
