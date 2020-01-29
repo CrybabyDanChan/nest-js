@@ -13,34 +13,29 @@ export class NoteService extends Service{
     }
 
     async getFullTable() {
-        let tagRep = this.entities.getRepository(Tag);
-        let notesArr = await this.entities.find(this.entity);
-        notesArr.map((el) => {
-            el.tags = this.entities.find(Tag, { 
-                relations: ['notes'],
-                where: { id: el.id } 
-            })
-        })
+        let notesArr = await this.entities.find(this.entity, { relations: ["tag"] })
         return notesArr
     }
 
-    // async addTagToNote(id, tags) {
-    //     let notesRep = this.entities.getRepository(Note);
-    //     let noteEntity = await notesRep.findOne(id, { relations: ["tag"] });
-    //     await this.tagService.addTag(tags).then(() => {
-    //         tags.forEach(async tag => {
-    //             let tagEntity = await this.entities.findOne(Tag, { content: tag });
-    //             let tagIsPresent = noteEntity.tag.find(tagEnt => tagEnt.content === tag);
-    //             if (!tagIsPresent) {
-    //                 noteEntity.tag.push(tagEntity);
-    //                 await this.entities.save(noteEntity);
-    //             }
-    //         })
-    //     })
+    async addTagToNote(id, tags) {
+        let notesRep = this.entities.getRepository(Note);
+        console.log(notesRep)
+        let noteEntity = await notesRep.findOne(id, { relations: ["tag"] });
+        console.log(noteEntity)
+        await this.tagService.addTag(tags).then(() => {
+            tags.forEach(async tag => {
+                let tagEntity = await this.entities.findOne(Tag, { content: tag });
+                let tagIsPresent = noteEntity.tag.find(tagEnt => tagEnt.content === tag);
+                if (!tagIsPresent) {
+                    noteEntity.tag.push(tagEntity);
+                    await this.entities.save(noteEntity);
+                }
+            })
+        })
 
-    //     let resultEntity = await notesRep.findOne(id, { relations: ["tag"] });
-    //     return resultEntity
-    // }
+        let resultEntity = await notesRep.findOne(id, { relations: ["tag"] });
+        return resultEntity
+    }
 
 
     async getTags(id) {

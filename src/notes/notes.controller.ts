@@ -8,8 +8,8 @@ export class NoteController {
     
 
     @Get()
-    async getUsers() {
-        return  await this.noteService.getFullTable();
+    getUsers() {
+        return this.noteService.getFullTable();
     }
 
     @Get(':id')
@@ -29,10 +29,11 @@ export class NoteController {
         return this.noteService.addRow(data);
     } 
 
-    // @Put(':id/addtag')
-    // addTagToNote(@Param() params, @Query() data) {
-    //     let id = params.id;
-    //     let tagsArray = data.tags.split(',');
-    //     this.noteService.addTagToNote(id, tagsArray);       
-    // }
+    @Put(':id/tags/addtag')
+    addTagToNote(@Param() params, @Body() data) {
+        console.log(data)
+        let id = params.id;
+        let tagsArray = data.tags.split(',');
+        this.noteService.addTagToNote(id, tagsArray);       
+    }
 }
