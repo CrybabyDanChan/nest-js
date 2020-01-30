@@ -1,6 +1,6 @@
-PUT http://localhost:3000/notes/1/tags/addtag HTTP/1.1
+PUT http://localhost:3000/notes/1/tags/add HTTP/1.1
 content-type: application/json
 
 {
-    "tags": "sample"
+    "name": "red"
 }

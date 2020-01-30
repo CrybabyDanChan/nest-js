@@ -1,23 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager } from 'typeorm';
 import { Tag } from 'src/entities/tags.entity';
+import { Service } from 'src/models';
 
 @Injectable()
-export class TagsService {
-    constructor(private entities: EntityManager) { }
-
-    async addTag(tags) {
-        let tagsPromisesArray = tags.map(async tag => {
-            let isPresent = await this.entities.findOne(Tag, { name: tag });
-            if (!isPresent) {
-                let tagEntity = new Tag();
-                tagEntity.name = tag;
-                await this.entities.save(tagEntity);
-                return 'done'
-            }
-            return 'done'
-        })
-        let results = Promise.all(tagsPromisesArray)
-        return results;
+export class TagsService extends Service {
+    constructor(entities: EntityManager) {
+        super(Tag, entities)
+    }
+    async addTag(tagName, noteEntity) {
+        let isPresent = await this.entities.findOne(Tag, { name: tagName });
+        let tagIsPresent = noteEntity.tag.find(tagEnt => tagEnt.name === tagName);
+        if(!isPresent && !tagIsPresent) {
+            let tagEntity = new Tag();
+            tagEntity.name = tagName;
+            await this.entities.save(tagEntity)
+            noteEntity.tag.push(tagEntity);
+            await this.entities.save(noteEntity)
+        } else if(isPresent && !tagIsPresent) {
+            noteEntity.tag.push(isPresent);
+            await this.entities.save(noteEntity)
+        }
+        return 'done'
     }
 }

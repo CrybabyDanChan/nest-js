@@ -29,11 +29,16 @@ export class NoteController {
         return this.noteService.addRow(data);
     } 
 
-    @Put(':id/tags/addtag')
+    @Put(':id/tags/add')
     addTagToNote(@Param() params, @Body() data) {
-        console.log(data)
         let id = params.id;
-        let tagsArray = data.tags.split(',');
-        this.noteService.addTagToNote(id, tagsArray);       
+        let tagName = data.name;
+        this.noteService.addTagToNote(id, tagName);       
     }
+
+    @Delete(':id/tags/delete')
+    deleteTagFromNote(@Param() params, @Body() data) {
+        let id = params.id;
+        let tagName = data.name;
+        this.noteService.deleteTagsFromNote(id, tagName);    }
 }
