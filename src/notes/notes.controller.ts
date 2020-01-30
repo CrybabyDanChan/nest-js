@@ -8,12 +8,12 @@ export class NoteController {
     
 
     @Get()
-    getUsers() {
+    getNotes() {
         return this.noteService.getFullTable();
     }
 
     @Get(':id')
-    getPost(@Param() params) {
+    getNote(@Param() params) {
         let id = params.id;
         return this.noteService.getRow(id);
     }

@@ -19,7 +19,7 @@ export class Note {
   @ManyToOne(type => User, user => user.notes)
   user: User;
 
-  @ManyToMany(type => User)
+  @ManyToMany(type => User, user => user.id)
   @JoinTable()
   like: User[];
 

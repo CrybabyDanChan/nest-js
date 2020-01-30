@@ -21,4 +21,5 @@ export class User {
 
   @OneToMany(type => Note, note => note.user)
   notes: Note[];
+
 }

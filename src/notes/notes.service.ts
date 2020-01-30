@@ -12,8 +12,13 @@ export class NoteService extends Service{
     }
 
     async getFullTable() {
-        let notesArr = await this.entities.find(this.entity, { relations: ["tag"] })
+        let notesArr = await this.entities.find(this.entity, { relations: ["like", "tag"] })
         return notesArr
+    }
+
+    async getRow(id) {
+        let notesRep = this.entities.getRepository(Note);
+        return await notesRep.findOne(id, { relations: ["like", "tag"] })
     }
 
     async addTagToNote(id, tags) {
