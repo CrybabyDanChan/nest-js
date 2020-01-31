@@ -8,7 +8,7 @@ export class AuthService {
   constructor( @InjectRepository(User) private UsersRep: Repository<User>) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.UsersRep.findOne(username);
+    const user = await this.UsersRep.findOne({ name: username });
     if (user && user.password === pass) {
       const { password, ...result } = user;
       return result;

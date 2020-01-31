@@ -9,10 +9,11 @@
 #     "password": "1234"
 # }
 
-POST http://localhost:3000/users/1/notes/add HTTP/1.1
+POST http://localhost:3000/auth/login HTTP/1.1
 content-type: application/json
 
 {
-    "title": "dsadsad",
-    "text": "how are you?"
+    "username": "dany", 
+    "password": "1234"
 }
+
