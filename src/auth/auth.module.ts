@@ -4,9 +4,15 @@ import { LocalStrategy } from './local.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './constants';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), PassportModule],
-  providers: [AuthService, LocalStrategy]
+  imports: [TypeOrmModule.forFeature([User]), PassportModule, JwtModule.register({
+    secret: jwtConstants.secret,
+    signOptions: { expiresIn: '60s' },
+  }),],
+  providers: [AuthService, LocalStrategy],
+  exports: [AuthService]
 })
 export class AuthModule {}
