@@ -8,6 +8,7 @@ import { NoteController } from './notes/notes.controller';
 import { NoteService } from './notes/notes.service';
 import { TagsController } from './tags/tags.controller';
 import { TagsService } from './tags/tags.service';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -19,7 +20,8 @@ import { TagsService } from './tags/tags.service';
       database: 'mydb',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
-    })
+    }),
+    AuthModule,
   ],
   controllers: [AppController, UsersController, NoteController, TagsController],
   providers: [AppService, UsersService, NoteService, TagsService],

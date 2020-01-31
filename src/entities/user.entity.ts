@@ -13,10 +13,13 @@ export class User {
   @Column()
   email: string;
 
-  @Column({type: 'int', nullable:true})
+  @Column()
+  password: string;
+
+  @Column({nullable:true})
   phoneNumber: number;
 
-  @Column({type: 'int', nullable:true})
+  @Column({nullable:true})
   birthDate: string;
 
   @OneToMany(type => Note, note => note.user)

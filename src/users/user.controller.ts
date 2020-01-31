@@ -5,12 +5,6 @@ import { UsersService } from './user.service';
 export class UsersController {
     constructor(public userService: UsersService) { }
 
-    @Options()
-    @Header('Access-Control-Allow-Origin', '*')
-    response() {
-        console.log('one')
-    }
-
     @Get(':id')
     getUser(@Param() params) {
         let id = params.id;
@@ -26,6 +20,17 @@ export class UsersController {
     getUserPosts(@Param() params) {
         let id = params.id;
         return this.userService.getNotes(id);
+    }
+
+    @Post('register')
+    addUser(@Body() user) {
+        return this.userService.addRow(user);
+    }
+
+    @Post(':id/notes/add')
+    addNoteFromUser(@Param() params, @Body() note) {
+        let id = params.id
+        return this.userService.addNoteFromUser(id,note);
     }
 
 }

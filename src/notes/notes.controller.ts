@@ -24,7 +24,7 @@ export class NoteController {
         return this.noteService.getTags(id);
     }
 
-    @Post()
+    @Post('add')
     addNote(@Body() data) {
         return this.noteService.addRow(data);
     } 

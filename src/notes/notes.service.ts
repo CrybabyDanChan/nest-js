@@ -43,4 +43,11 @@ export class NoteService extends Service{
         let note = await notesRep.findOne(id, { relations: ["tag"]});
         return note.tag;
     }
+
+    async addNoteFromUser(note, user) {
+        await this.entities.save(this.entity, note)
+        let isPresent = await this.entities.findOne(Note, { title: note.title })
+        user.notes.push(isPresent)
+        this.entities.save(user)
+    }
 }

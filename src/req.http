@@ -1,0 +1,18 @@
+# POST http://localhost:3000/users/register HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "dany",
+#     "email": "dany@mail.uk",
+#     "phoneNumber": "89994324",
+#     "birthDate": "20.11",
+#     "password": "1234"
+# }
+
+POST http://localhost:3000/users/1/notes/add HTTP/1.1
+content-type: application/json
+
+{
+    "title": "dsadsad",
+    "text": "how are you?"
+}
