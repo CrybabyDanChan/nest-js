@@ -17,7 +17,7 @@ export class UsersController {
         return this.userService.getFullTable();
     }
 
-    
+    @UseGuards(AuthGuard('jwt'))
     @Get(':id/notes')
     getUserPosts(@Param() params, @Request() req) {
         let id = params.id;
@@ -29,9 +29,10 @@ export class UsersController {
         return this.userService.addRow(user);
     }
 
+    @UseGuards(AuthGuard('jwt'))
     @Post('notes/add')
-    addNoteFromUser(@Request() req, @Body() note, @Param() params) {
-        let id = params.id
+    addNoteFromUser(@Request() req, @Body() note) {
+        let id = req.userId;
         return this.userService.addNoteFromUser(id,note);
     }
 
