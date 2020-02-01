@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Body, Put, Param, Options, Header, Delete, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Options, Header, Delete, Res, UseGuards, Request } from '@nestjs/common';
 import { UsersService } from './user.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -16,8 +17,9 @@ export class UsersController {
         return this.userService.getFullTable();
     }
 
+    
     @Get(':id/notes')
-    getUserPosts(@Param() params) {
+    getUserPosts(@Param() params, @Request() req) {
         let id = params.id;
         return this.userService.getNotes(id);
     }
@@ -27,8 +29,8 @@ export class UsersController {
         return this.userService.addRow(user);
     }
 
-    @Post(':id/notes/add')
-    addNoteFromUser(@Param() params, @Body() note) {
+    @Post('notes/add')
+    addNoteFromUser(@Request() req, @Body() note, @Param() params) {
         let id = params.id
         return this.userService.addNoteFromUser(id,note);
     }
