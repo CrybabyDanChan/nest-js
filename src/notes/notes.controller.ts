@@ -1,53 +1,51 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from '@nestjs/common';
-import { NoteService } from './notes.service';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, Request } from "@nestjs/common";
+import { NoteService } from "./notes.service";
+import { AuthGuard } from "@nestjs/passport";
 
-
-@Controller('notes')
+@Controller("notes")
 export class NoteController {
-    constructor(private noteService: NoteService) { }
-    
+  constructor (private noteService: NoteService) { }
 
     @Get()
-    getNotes() {
-        return this.noteService.getFullTable();
+  getNotes () {
+    return this.noteService.getFullTable();
+  }
+
+    @Get(":id")
+    getNote (@Param() params) {
+      const id = params.id;
+      return this.noteService.getRow(id);
     }
 
-    @Get(':id')
-    getNote(@Param() params) {
-        let id = params.id;
-        return this.noteService.getRow(id);
+    @Get(":id/tags")
+    getTags (@Param() params) {
+      const id = params.id;
+      return this.noteService.getTags(id);
     }
 
-    @Get(':id/tags')
-    getTags(@Param() params) {
-        let id = params.id;
-        return this.noteService.getTags(id);
+    @Post("add")
+    addNote (@Body() data) {
+      return this.noteService.addRow(data);
     }
 
-    @Post('add')
-    addNote(@Body() data) {
-        return this.noteService.addRow(data);
-    } 
-
-    @UseGuards(AuthGuard('jwt'))
-    @Put(':id/tags/add')
-    addTagToNote(@Param() params, @Body() data, @Request() req) {
-        let noteId = params.id;
-        let tagName = data.name;
-        this.noteService.addTagToNote(noteId, tagName, req.user);
+    @UseGuards(AuthGuard("jwt"))
+    @Put(":id/tags/add")
+    addTagToNote (@Param() params, @Body() data, @Request() req) {
+      const noteId = params.id;
+      const tagName = data.name;
+      this.noteService.addTagToNote(noteId, tagName, req.user);
     }
 
-    @Delete(':id/tags/delete')
-    deleteTagFromNote(@Param() params, @Body() data) {
-        let id = params.id;
-        let tagName = data.name;
-        this.noteService.deleteTagsFromNote(id, tagName);   
+    @Delete(":id/tags/delete")
+    deleteTagFromNote (@Param() params, @Body() data) {
+      const id = params.id;
+      const tagName = data.name;
+      this.noteService.deleteTagsFromNote(id, tagName);
     }
 
-    @UseGuards(AuthGuard('jwt'))
-    @Post(':id/likes/add')
-    addLikeFromNote(@Param() params, @Request() req) {
-        this.noteService.addLikeFromNote(params.id, req.user.userId)
-    }    
+    @UseGuards(AuthGuard("jwt"))
+    @Post(":id/likes/add")
+    addLikeFromNote (@Param() params, @Request() req) {
+      this.noteService.addLikeFromNote(params.id, req.user.userId);
+    }
 }

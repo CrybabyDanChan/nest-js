@@ -1,28 +1,28 @@
 export class Service {
-    constructor( protected entity: any, protected entities) {}
+  constructor (protected entity: any, protected entities) {}
 
-    getFullTable() {
-        return this.entities.find(this.entity);
-    }
+  getFullTable () {
+    return this.entities.find(this.entity);
+  }
 
-    getRow(id) {
-        return this.entities.findOne(this.entity, id);
-    }
+  getRow (id) {
+    return this.entities.findOne(this.entity, id);
+  }
 
-    addRow(rowData) {
-        this.entities.save(this.entity, rowData)
-        .catch( err => console.log(err))
-    }
+  addRow (rowData) {
+    this.entities.save(this.entity, rowData)
+      .catch(err => console.log(err));
+  }
 
-    async updateRow(rowData, id) {
-        let updatedRow = await this.entities.findOne(this.entity, id);
-        for (let col in rowData) {
-            updatedRow[col] = rowData[col]
-        }
-        this.entities.save(updatedRow);
+  async updateRow (rowData, id) {
+    const updatedRow = await this.entities.findOne(this.entity, id);
+    for (const col in rowData) {
+      updatedRow[col] = rowData[col];
     }
+    this.entities.save(updatedRow);
+  }
 
-    deleteRow(id) {
-        this.entities.delete(this.entity, id);
-    }
+  deleteRow (id) {
+    this.entities.delete(this.entity, id);
+  }
 }
