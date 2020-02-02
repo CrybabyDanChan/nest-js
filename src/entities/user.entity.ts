@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
-import { Note } from "./note.entity"
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, JoinTable } from "typeorm";
+import { Note } from "./note.entity";
 
 @Entity()
 export class User {
@@ -12,10 +12,16 @@ export class User {
   @Column()
   email: string;
 
-  @Column({type: 'int', nullable:true})
+  @Column()
+  password: string;
+
+  @Column({ nullable: true })
+  numberOfLatestLikes: number;
+
+  @Column({ nullable: true })
   phoneNumber: number;
 
-  @Column()
+  @Column({ nullable: true })
   birthDate: string;
 
   @OneToMany(type => Note, note => note.user)
