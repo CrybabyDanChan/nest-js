@@ -2,27 +2,36 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "username": "dany",
-    "password": "1234"
+    "username": "danys",
+    "password": "12345"
 }
 
 ###
 
-POST http://localhost:3000/users/notes/add
+POST http://localhost:3000/users/register
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbnkiLCJzdWIiOjEsImlhdCI6MTU4MDU2NTAwOSwiZXhwIjoxNTgwNzgxMDA5fQ.XrpoWGpF3HHThUYERkfPn0576S2e8kOVQeNrWdDB1JA
 
 {
-    "text": "danyss",
-    "title": "fs"
+    "name": "danys",
+    "password": "12345",
+    "email": "dany@mail.ru"
+}
+###
+POST http://localhost:3000/users/notes/add
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbnlzIiwic3ViIjo1LCJpYXQiOjE1ODA2NjE5MjMsImV4cCI6MTU4MDg3NzkyM30.i23D88U5O11ReGNvs0oah3nT0f-DlMxD0yzb8lftVy0
+
+{
+    "text": "10",
+    "title": "10"
 }
 
 
 ###
 
-PUT http://localhost:3000/notes/27/tags/add
+PUT http://localhost:3000/notes/22/tags/add
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbnkiLCJzdWIiOjEsImlhdCI6MTU4MDU2NTAwOSwiZXhwIjoxNTgwNzgxMDA5fQ.XrpoWGpF3HHThUYERkfPn0576S2e8kOVQeNrWdDB1JA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbnlzIiwic3ViIjo1LCJpYXQiOjE1ODA2NjE5MjMsImV4cCI6MTU4MDg3NzkyM30.i23D88U5O11ReGNvs0oah3nT0f-DlMxD0yzb8lftVy0
 
 {
     "name": "dans"
@@ -30,10 +39,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhb
 
 ###
 
-POST http://localhost:3000/notes/27/likes/add
+POST http://localhost:3000/notes/22/likes/add
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbnkiLCJzdWIiOjEsImlhdCI6MTU4MDU1MzUyOSwiZXhwIjoxNTgwNzY5NTI5fQ.C7ck_hLCtuMx7sUSXwQ65ZepLwlvHP3pRDKhv7Q5I48
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbnlzIiwic3ViIjo1LCJpYXQiOjE1ODA2NjE5MjMsImV4cCI6MTU4MDg3NzkyM30.i23D88U5O11ReGNvs0oah3nT0f-DlMxD0yzb8lftVy0
 
 {
     "tab": "1"
 }
+
+###
+
+GET http://localhost:3000/users

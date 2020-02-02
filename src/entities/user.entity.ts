@@ -16,6 +16,9 @@ export class User {
   password: string;
 
   @Column({ nullable: true })
+  numberOfLatestLikes: number;
+
+  @Column({ nullable: true })
   phoneNumber: number;
 
   @Column({ nullable: true })
