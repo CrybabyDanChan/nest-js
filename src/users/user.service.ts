@@ -10,99 +10,89 @@ export class UsersService extends Service {
     super(User, entities);
   }
 
-  sortingByRecentEntries (user, rangeFromNotes) {
-    if (user.notes.length >= rangeFromNotes) {
-      const interval = user.notes.length - rangeFromNotes;
-      const filterNotes = user.notes.filter((us, i) => {
-        if (i >= interval) {
-          return i;
+  async sortingByRecentEntries (userId) {
+    const rangeByLatestNotes = 10;
+    const userRep = await getRepository(User);
+    const userWithNotes = await userRep.findOne(userId, { relations: ["notes"] });
+    if (userWithNotes.notes.length <= rangeByLatestNotes) {
+      return userWithNotes.notes;
+    } else {
+      return userWithNotes.notes.filter((note, i) => {
+        if (i >= userWithNotes.notes.length - rangeByLatestNotes) {
+          return note;
         }
       });
-      user.lastNotes = filterNotes.concat();
     }
   }
 
-  async listOfUniqueTags (user) {
-    const tagsFromUser = user.notes.map(async us => {
-      const rep = await getRepository(Note);
-      const userWithTags = await rep.findOne(us.id, { relations: ["tag"] });
-      const tagFromNote = { ...userWithTags.tag[0] };
-      return tagFromNote;
+  async listOfUniqueTags (userId) {
+    const userRep = await getRepository(User);
+    const userWithNotes = await userRep.findOne(userId, { relations: ["notes"] });
+    const tagsByUser = userWithNotes.notes.map(async note => {
+      const repNote = await getRepository(Note);
+      const noteWuthTags = await repNote.findOne(note.id, { relations: ["tag"] });
+      return noteWuthTags.tag;
     });
-    await Promise.all(tagsFromUser).then(tags => {
-      user.uniqueTags = tags.filter((tag, i) => {
-        if (Object.keys(tag).length !== 0) {
-          return tags.indexOf(tag) === i;
-        }
-      });
-    });
-  }
-
-  async likesFromUser (user) {
-    const allLikesFromUser = user.notes.map(async (note: any) => {
-      const rep = await getRepository(Note);
-      const noteWithLikes = await rep.findOne(note.id, { relations: ["like"] });
-      return noteWithLikes.like.length;
-    });
-    await Promise.all(allLikesFromUser).then(t => {
-      if (t.length) {
-        const numberOfLikes = t.reduce((sum: any, current: any) => {
-          return sum + current;
+    const uniqueTags = await Promise.all(tagsByUser)
+      .then(tags => {
+        return tags.filter((tag, i) => {
+          if (Object.keys(tag).length !== 0) {
+            return tags.indexOf(tag) === i;
+          };
         });
-        user.likes = numberOfLikes;
-      }
-    });
-  }
-
-  async ratingFromLikes (user: any) {
-    const notes = await this.entities.find(Note, { relations: ["like"] });
-    const numAllLikes = notes.reduce((sum: any, current: any) => {
-      return sum + current.like.length;
-    }, 0);
-    const range = 100;
-    const coefficientFoRating = range / numAllLikes;
-    user.ratingFromLikes = user.likes * coefficientFoRating;
-  }
-
-  async latestLikesFromUser (user: any) {
-    if (user.lastNotes) {
-      const allLikesLatestFromUser = user.lastNotes.map(async (note: any) => {
-        const rep = await getRepository(Note);
-        const noteWithLikes = await rep.findOne(note.id, { relations: ["like"] });
-        return noteWithLikes.like.length;
       });
-      await Promise.all(allLikesLatestFromUser).then(likes => {
-        const numberOfLikes = likes.reduce((sum:any, current:any) => sum + current);
-        user.numberOfLatestLikes = numberOfLikes;
-      });
-      this.entities.save(user);
-    }
+    return uniqueTags;
   }
 
-  async ratingByLikesForLatestNotes (user) {
-    const userWithLatestLikes = await this.entities.find(User);
-    const numAllLatestLikes = userWithLatestLikes.reduce((sum:any, current:any) => {
-      return sum + current.numberOfLatestLikes;
-    }, 0);
-    const range = 100;
-    const coefficientFoRating = range / numAllLatestLikes;
-    user.ratingFromLikesAndLatestNotes = user.numberOfLatestLikes * coefficientFoRating;
+  assignmentOfRating (users, userId) {
+    const coefficient = Math.floor(100 / Math.max.apply(null, users.map(user => user.allLikes)));
+    const user = users.find(user => user.userId === userId);
+    return user.allLikes * coefficient;
   }
 
-  async getFullTable () {
+  async ratingFromLikes (userId) {
     let users = await this.entities.find(this.entity, { relations: ["notes"] });
     users = users.map(async user => {
-      const rangeFromNotes = 10;
-      this.sortingByRecentEntries(user, rangeFromNotes);
-      await this.listOfUniqueTags(user);
-      await this.likesFromUser(user);
-      await this.ratingFromLikes(user);
-      await this.latestLikesFromUser(user);
-      await this.ratingByLikesForLatestNotes(user);
-      return user;
+      const allLikesByUser = user.notes.map(async note => {
+        const repNote = await getRepository(Note);
+        const noteWithLike = await repNote.findOne(note.id, { relations: ["like"] });
+        return noteWithLike.like;
+      });
+      const allLikes = await Promise.all(allLikesByUser)
+        .then(likes => {
+          const allLikesFromUser: any = likes
+            .reduce((sum:any, current:any) => {
+              return sum + current.length;
+            }, 0);
+          return { userId: user.id, allLikes: allLikesFromUser };
+        });
+      return allLikes;
     });
-    const newUsers = await Promise.all(users);
-    return newUsers;
+    const ratingFromUser = await Promise.all(users).then(t => this.assignmentOfRating(t, userId));
+    return ratingFromUser;
+  }
+
+  async ratingFromLatestLikes (userId) {
+    let users = await this.entities.find(this.entity, { relations: ["notes"] });
+    users = users.map(async user => {
+      const latestNotes = await this.sortingByRecentEntries(user.id);
+      const latestNotesWithLikes = latestNotes.map(async note => {
+        const repNote = await getRepository(Note);
+        const noteWithLike = await repNote.findOne(note.id, { relations: ["like"] });
+        return noteWithLike.like;
+      });
+      const allLikes = await Promise.all(latestNotesWithLikes)
+        .then(likes => {
+          const allLikesFromUser: any = likes
+            .reduce((sum:any, current:any) => {
+              return sum + current.length;
+            }, 0);
+          return { userId: user.id, allLikes: allLikesFromUser };
+        });
+      return allLikes;
+    });
+    const ratingFromUser = await Promise.all(users).then(t => this.assignmentOfRating(t, userId));
+    return ratingFromUser;
   }
 
   async getNotes (id) {
