@@ -7,6 +7,34 @@ export class UsersController {
   // eslint-disable-next-line no-useless-constructor
   constructor (public userService: UsersService) { }
 
+  @UseGuards(AuthGuard("jwt"))
+  @Get("recentEntries")
+  getRecentEntries (@Request() req) {
+    const userId = req.user.userId;
+    return this.userService.sortingByRecentEntries(userId);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Get("uniqueTags")
+  getUniqueTags (@Request() req) {
+    const userId = req.user.userId;
+    return this.userService.listOfUniqueTags(userId);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Get("rating-by-likes")
+  ratingFromLikes (@Request() req) {
+    const userId = req.user.userId;
+    return this.userService.ratingFromLikes(userId);
+  }
+
+  @UseGuards(AuthGuard("jwt"))
+  @Get("rating-by-latest-likes")
+  ratingFromLatestLikes (@Request() req) {
+    const userId = req.user.userId;
+    return this.userService.ratingFromLatestLikes(userId);
+  }
+
   @Get(":id")
   getUser (@Param() params) {
     const id = params.id;
